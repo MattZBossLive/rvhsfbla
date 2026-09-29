@@ -70,4 +70,48 @@ document.querySelectorAll('.reveal, .reveal-group').forEach((element) => {
   revealObserver.observe(element);
 });
 
+document.querySelectorAll('.slideshow').forEach((slideshow) => {
+  const track = slideshow.querySelector('.slides');
+  const dots = slideshow.querySelectorAll('.slide-dots button');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let current = 0;
+
+  function goTo(index) {
+    const next = (index + dots.length) % dots.length;
+
+    track.scrollTo({
+      left: next * track.clientWidth,
+      behavior: reduceMotion.matches ? 'auto' : 'smooth',
+    });
+  }
+
+  function updateDots() {
+    current = Math.round(track.scrollLeft / track.clientWidth);
+
+    dots.forEach((dot, index) => {
+      if (index === current) {
+        dot.setAttribute('aria-current', 'true');
+      } else {
+        dot.removeAttribute('aria-current');
+      }
+    });
+  }
+
+  slideshow.querySelector('.slide-prev').addEventListener('click', () => goTo(current - 1));
+  slideshow.querySelector('.slide-next').addEventListener('click', () => goTo(current + 1));
+
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => goTo(index));
+  });
+
+  slideshow.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') goTo(current - 1);
+    if (event.key === 'ArrowRight') goTo(current + 1);
+  });
+
+  track.addEventListener('scroll', updateDots, { passive: true });
+});
+
+document.documentElement.classList.add('js');
+
 document.getElementById('year').textContent = new Date().getFullYear();

@@ -3,6 +3,9 @@
 Thumbs.db
 desktop.ini
 
+# Original phone photos (the site uses the converted JPEGs)
+*.heic
+
 # Editor and tool settings
 .vscode/
 .idea/
