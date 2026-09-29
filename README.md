@@ -15,38 +15,59 @@ images/       logo and photos
 
 ## Editing content
 
-Almost everything lives in `index.html`. Anything still waiting on real information is in square brackets, like `[ROOM]` or `[NAME]`, so searching the file for `[` will find all of it.
+Almost everything lives in `index.html`. The colors are pulled from the chapter logo and defined as CSS variables at the top of `styles.css`, so changing them there updates the whole site.
 
-Still to fill in:
+Details that change during the year, and where to find them:
 
-- Meeting day, time, frequency, and room
-- Officer names and bios
-- Mr. Green's room number
+| What | Where |
+|---|---|
+| Meeting day and room | Hero facts, `#meetings`, the FAQ, `#join`, and the footer |
+| Dues amount and payment link | `#meetings`, the FAQ, and `#join` |
+| Officers | `#officers`, one `article.officer` per person |
+| Open officer seats | `#open-positions`, one `li.seat` per role |
+| Instagram handle | Search for `riverviewhighfbla` |
 
-The colors are pulled from the chapter logo and defined as CSS variables at the top of `styles.css`. Changing them there updates the whole site.
+When an officer seat is filled, delete its `li.seat`, add an `article.officer` for the new officer, and update the count in the Officers intro.
 
 ## Adding photos
 
-Each photo spot is a dashed placeholder box that says what goes there and what size it should be. To add a photo, put the file in `images/` and replace the placeholder `div` with an `img`:
+Officer cards show the person's initials until a photo is added. To swap one in, put the file in `images/` and replace the initials `div` with an `img`:
 
 ```html
-<!-- before -->
-<div class="placeholder reveal">
-  Chapter photo
-  <small>1200 &times; 800</small>
-</div>
+<div class="officer-photo" aria-hidden="true">FK</div>
 
-<!-- after -->
-<img class="photo reveal" src="images/chapter.jpg" alt="Members at a chapter meeting" width="1200" height="800">
+<img class="officer-photo" src="images/officer-president.jpg" alt="Fanuel Kidus" width="400" height="400" loading="lazy">
 ```
 
-Officer photos work the same way with `class="officer-photo"`. The hero background uses `class="hero-photo"` and an empty `alt=""`, since it's decorative. The full list of photos and sizes is in [images/README.md](images/README.md).
+The photo beside "What is FBLA?" works the same way. Replace the `photo-slot` div with:
+
+```html
+<img class="photo" src="images/first-meeting.jpg" alt="Members at the inaugural chapter meeting" width="1200" height="900" loading="lazy">
+```
+
+For a hero background photo, add this as the first child of `section.hero`:
+
+```html
+<img class="hero-photo" src="images/hero.jpg" alt="" width="2400" height="1350">
+```
+
+The full list of photos and sizes is in [images/README.md](images/README.md).
+
+## Officer application QR code
+
+The QR box in `#open-positions` is a placeholder. Save the code as `images/officer-apply-qr.png` and replace the `qr-slot` div with:
+
+```html
+<img class="qr-code" src="images/officer-apply-qr.png" alt="QR code to apply for an officer seat" width="200" height="200" loading="lazy">
+```
+
+The "Apply for an officer seat" button next to it currently opens the chapter's Instagram page. Point its `href` at the application form once there is one, and update the line above it that says to message us.
 
 ## Publishing
 
 The site is set up to run on GitHub Pages. In the repo, go to Settings > Pages, choose "Deploy from a branch," and pick `main` with the root folder. Every push to `main` updates the live site within a minute or two.
 
-If the chapter gets a custom domain later, add it under Settings > Pages > Custom domain. After that, change the `og:url` and `og:image` tags in `index.html` to full URLs so link previews show up on Instagram and in texts.
+Once the site has a URL, add `og:url` and `og:image` tags to the head of `index.html` using full URLs (`https://...`) so link previews show up on Instagram and in texts.
 
 ## Notes
 

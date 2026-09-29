@@ -41,8 +41,10 @@ const sectionObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
 
+    const target = entry.target.dataset.nav || entry.target.id;
+
     navLinks.forEach((link) => {
-      if (link.hash === `#${entry.target.id}`) {
+      if (link.hash === `#${target}`) {
         link.setAttribute('aria-current', 'true');
       } else {
         link.removeAttribute('aria-current');
