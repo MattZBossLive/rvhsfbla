@@ -8,7 +8,7 @@ The website for the Riverview High School chapter of Future Business Leaders of 
 
 A single-page site for current and prospective members, parents, and community partners. It covers what FBLA is, how competitions work, the chapter's officers and open positions, when and where we meet, what dues cost and how to pay them, and how to join.
 
-It's built with HTML, CSS, and a small amount of JavaScript, and hosted on GitHub Pages. There is no build step, and the page works with JavaScript turned off.
+Built with HTML, CSS, and a small amount of JavaScript, and hosted on GitHub Pages.
 
 ## Contact
 
