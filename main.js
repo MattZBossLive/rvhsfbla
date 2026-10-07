@@ -1,11 +1,29 @@
+// Helpers
+
+function setCurrent(element, isCurrent) {
+  if (isCurrent) {
+    element.setAttribute('aria-current', 'true');
+  } else {
+    element.removeAttribute('aria-current');
+  }
+}
+
+
+// Navigation
+
 const header = document.querySelector('.site-header');
 const menuButton = document.querySelector('.nav-toggle');
 const menu = document.getElementById('nav-menu');
+const navLinks = menu.querySelectorAll('.nav-link');
 
 function setMenuOpen(open) {
   header.classList.toggle('is-open', open);
   menuButton.setAttribute('aria-expanded', String(open));
   menuButton.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+}
+
+function updateHeaderShadow() {
+  header.classList.toggle('is-scrolled', window.scrollY > 8);
 }
 
 menuButton.addEventListener('click', () => {
@@ -27,26 +45,18 @@ window.matchMedia('(min-width: 981px)').addEventListener('change', (event) => {
   if (event.matches) setMenuOpen(false);
 });
 
-function updateHeaderShadow() {
-  header.classList.toggle('is-scrolled', window.scrollY > 8);
-}
-
-updateHeaderShadow();
 window.addEventListener('scroll', updateHeaderShadow, { passive: true });
+updateHeaderShadow();
 
-// Underline the nav link for whichever section is in the middle of the screen
-const navLinks = menu.querySelectorAll('.nav-link');
+
+// Active section
 
 const sectionObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
 
     navLinks.forEach((link) => {
-      if (link.hash === `#${entry.target.id}`) {
-        link.setAttribute('aria-current', 'true');
-      } else {
-        link.removeAttribute('aria-current');
-      }
+      setCurrent(link, link.hash === `#${entry.target.id}`);
     });
   });
 }, { rootMargin: '-45% 0px -50% 0px' });
@@ -54,6 +64,9 @@ const sectionObserver = new IntersectionObserver((entries) => {
 document.querySelectorAll('main > section[id]').forEach((section) => {
   sectionObserver.observe(section);
 });
+
+
+// Scroll reveal
 
 const revealObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {
@@ -68,10 +81,14 @@ document.querySelectorAll('.reveal, .reveal-group').forEach((element) => {
   revealObserver.observe(element);
 });
 
+
+// Photo slideshow
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
 document.querySelectorAll('.slideshow').forEach((slideshow) => {
   const track = slideshow.querySelector('.slides');
   const dots = slideshow.querySelectorAll('.slide-dots button');
-  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   let current = 0;
 
   function goTo(index) {
@@ -85,22 +102,12 @@ document.querySelectorAll('.slideshow').forEach((slideshow) => {
 
   function updateDots() {
     current = Math.round(track.scrollLeft / track.clientWidth);
-
-    dots.forEach((dot, index) => {
-      if (index === current) {
-        dot.setAttribute('aria-current', 'true');
-      } else {
-        dot.removeAttribute('aria-current');
-      }
-    });
+    dots.forEach((dot, index) => setCurrent(dot, index === current));
   }
 
   slideshow.querySelector('.slide-prev').addEventListener('click', () => goTo(current - 1));
   slideshow.querySelector('.slide-next').addEventListener('click', () => goTo(current + 1));
-
-  dots.forEach((dot, index) => {
-    dot.addEventListener('click', () => goTo(index));
-  });
+  dots.forEach((dot, index) => dot.addEventListener('click', () => goTo(index)));
 
   slideshow.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowLeft') goTo(current - 1);
@@ -110,6 +117,8 @@ document.querySelectorAll('.slideshow').forEach((slideshow) => {
   track.addEventListener('scroll', updateDots, { passive: true });
 });
 
-document.documentElement.classList.add('js');
 
+// Page setup
+
+document.documentElement.classList.add('js');
 document.getElementById('year').textContent = new Date().getFullYear();
