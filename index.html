@@ -27,9 +27,16 @@
     /* Five event categories: the last card fills the whole bottom row */
     .card-grid.numbered > .card:last-child { grid-column: 1 / -1; }
 
-    /* Open officer positions: three boxes spread evenly across the row */
-    .officer-grid.officer-grid-open {
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    /* Open officer positions: same-size boxes, spaced evenly across the row */
+    @media (min-width: 900px) {
+      .officer-grid.officer-grid-open {
+        display: flex;
+        justify-content: space-between;
+      }
+      /* Same width as one box in the four-across row above (assumes a 1.5rem gap) */
+      .officer-grid.officer-grid-open > .officer {
+        flex: 0 0 calc((100% - 4.5rem) / 4);
+      }
     }
   </style>
 
