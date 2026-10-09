@@ -27,15 +27,19 @@
     /* Five event categories: the last card fills the whole bottom row */
     .card-grid.numbered > .card:last-child { grid-column: 1 / -1; }
 
-    /* Open officer positions: same-size boxes, spaced evenly across the row */
-    @media (min-width: 900px) {
+    /* Open officer positions: same-size boxes in a staggered row */
+    .officer-grid.officer-grid-open { margin-top: 1.25rem; }
+
+    @media (min-width: 1000px) {
+      /* Centered under the row above, so each box sits between two officers */
       .officer-grid.officer-grid-open {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
+        gap: 1.25rem;
       }
-      /* Same width as one box in the four-across row above (assumes a 1.5rem gap) */
+      /* Same width as one box in the four-across row above (four columns with a 1.25rem gap) */
       .officer-grid.officer-grid-open > .officer {
-        flex: 0 0 calc((100% - 4.5rem) / 4);
+        flex: 0 0 calc((100% - 3.75rem) / 4);
       }
     }
   </style>
